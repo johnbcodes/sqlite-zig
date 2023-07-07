@@ -1,1 +1,1 @@
-# sqlite-zig
+# zig-experiments

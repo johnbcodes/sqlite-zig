@@ -16,17 +16,10 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     // Add Zig SQLite3 library dependency
-    const sqlite = b.addStaticLibrary(.{
-        .name = "sqlite",
+    const sqlite = b.dependency("sqlite", .{
         .target = target,
         .optimize = optimize,
     });
-    sqlite.addCSourceFile("third_party/zig-sqlite/c/sqlite3.c", &[_][]const u8{
-        "-std=c99",
-        "-DSQLITE_ENABLE_JSON1",
-    });
-    sqlite.addIncludePath("third_party/zig-sqlite/c");
-    sqlite.linkLibC();
 
     const exe = b.addExecutable(.{
         .name = "zig-experiments",
@@ -36,11 +29,9 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    exe.linkLibrary(sqlite);
-    exe.addIncludePath("third_party/zig-sqlite/c");
-    exe.addAnonymousModule("sqlite", .{
-        .source_file = .{ .path = "third_party/zig-sqlite/sqlite.zig" },
-    });
+    exe.addModule("sqlite", sqlite.module("sqlite"));
+    exe.addIncludePath(.{ .path = "c" });
+    exe.linkLibrary(sqlite.artifact("sqlite"));
 
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default

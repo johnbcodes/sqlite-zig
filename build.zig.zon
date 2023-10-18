@@ -1,0 +1,10 @@
+.{
+    .name = "zig-sqlite-demo",
+    .version = "0.1.0",
+    .dependencies = .{
+        .sqlite = .{
+            .url = "https://github.com/johnbcodes/zig-sqlite/archive/5b894456f0b1af492f908fdc72782be1052e1bbc.tar.gz",
+            .hash = "122029581230808cbbc084eba28c60b5d96fcf69a29d60cd9c43466e2d1db2200783",
+        },
+    },
+}
